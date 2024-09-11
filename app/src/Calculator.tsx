@@ -65,7 +65,9 @@ const Calculator: React.FC = () => {
   };
 
   const deleteRow = (index: number) => {
-    setRows(prevRows => prevRows.filter((_, i) => i !== index));
+    if (window.confirm('Are you sure you want to delete this row?')) {
+      setRows(prevRows => prevRows.filter((_, i) => i !== index));
+    }
   };
 
   return (
