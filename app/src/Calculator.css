@@ -68,6 +68,10 @@ button:hover {
 }
 
 @media (max-width: 768px) {
+
+  h1{
+    font-size: 18px;
+  }
   .card {
     width: 95%; /* Adjust width for smaller screens */
     padding: 15px; /* Reduce padding */
@@ -90,11 +94,14 @@ button:hover {
   }
 
   table {
-    font-size: 12px; /* Further reduce font size */
+    font-size: 10px; /* Further reduce font size */
   }
 
   button {
-    padding: 2px 5px; /* Further reduce button padding */
-    font-size: 12px; /* Further reduce button font size */
+    font-size: 10px; /* Further reduce button font size */
+  }
+
+  .action-buttons{
+    gap: 2px;
   }
 }
