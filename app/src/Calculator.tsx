@@ -74,7 +74,6 @@ const Calculator: React.FC = () => {
   const toggleEdit = (index: number) => {
     const newRows = [...rows];
     if (!newRows[index].editing) {
-      // Entering edit mode: store original values
       newRows[index].originalValues = {
         modelName: newRows[index].modelName,
         inputPrice: newRows[index].inputPrice,
@@ -84,8 +83,7 @@ const Calculator: React.FC = () => {
     newRows[index].editing = !newRows[index].editing;
 
     if (!newRows[index].editing) {
-      // Save to localStorage when exiting edit mode (save button clicked)
-      localStorage.setItem(localStorageKey, JSON.stringify(newRows.map(row => ({...row, originalValues: null})))); // Remove originalValues when saving
+      localStorage.setItem(localStorageKey, JSON.stringify(newRows.map(row => ({...row, originalValues: null}))));
     }
 
     setRows(newRows);
@@ -96,7 +94,7 @@ const Calculator: React.FC = () => {
     if (newRows[index].originalValues) {
       newRows[index] = {
         ...newRows[index],
-        ...newRows[index].originalValues, // Restore original values
+        ...newRows[index].originalValues,
         editing: false,
         originalValues: null,
       };
@@ -114,7 +112,18 @@ const Calculator: React.FC = () => {
     <div className="container">
       <h1>One-API Multiplier Calculator</h1>
       <div className="card">
-        <p style={{ textAlign: 'center' }}>Price calculated per 1k Tokens</p>
+        <div style={{ textAlign: 'left' }}>
+          <p>Price calculated per 1k Tokens</p>
+          <p>
+            <a href="https://github.com/songquanpeng" target="_blank" rel="noopener noreferrer">One-API</a> 是一个开源的 AI API 聚合程序，它支持 OpenAI、Google、Anthropic 等多个 API 提供商。One-API 通过一个统一的 API 接口，让用户可以方便地在不同的 API 提供商之间切换，并且提供用户计费功能，可以为每个用户的 API 请求计算价格。
+          </p>
+          <p>
+            倍率：在 One-API 的模型定价体系中，以 $0.002 1K tokens 为1倍，换算成 1M tokens 为 $2。补全倍率：补全倍率是指输出为输入的倍率，即输出的价格是输入的倍数。例如，输入价格为 $10，输出价格为 $30，那么输出价格是输入价格的 3 倍，补全倍率为 3。用户分组倍率：one-api 的运行和维护需要一定的服务器成本，因此可以设置一个分组倍率让相关用户在使用时分摊这部分成本。额度 = 分组倍率 * 模型倍率 * （提示 token 数 + 补全 token 数 * 补全倍率）
+          </p>
+          <p>
+            这里放一个 token 计费计算器方便大家使用：<a href="https://docsbot.ai/tools/gpt-openai-api-pricing-calculator" target="_blank" rel="noopener noreferrer">https://docsbot.ai/tools/gpt-openai-api-pricing-calculator</a>
+          </p>
+        </div>
         <table>
           <thead>
             <tr>
@@ -169,7 +178,7 @@ const Calculator: React.FC = () => {
                     {row.editing ? (
                       <>
                         <button onClick={() => toggleEdit(index)}>💾</button>
-                        <button onClick={() => cancelEdit(index)}>❌</button> {/* Cancel button */}
+                        <button onClick={() => cancelEdit(index)}>❌</button>
                       </>
                     ) : (
                       <>
