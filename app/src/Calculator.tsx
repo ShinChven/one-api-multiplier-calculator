@@ -105,6 +105,8 @@ const Calculator: React.FC = () => {
       editing: true, 
       originalValues: null 
     }]);
+    // Scroll to the bottom of the page
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
   };
 
   const handleInputChange = (index: number, field: string, value: string) => {
@@ -192,6 +194,7 @@ const Calculator: React.FC = () => {
             <div>
               <button onClick={toggleUnit} style={{ color: 'black' }}>切换为 {isPerMillion ? '1K' : '1M'}</button>
               <button onClick={resetData} style={{ color: 'red', marginLeft: '10px' }}>重置数据</button>
+              <button onClick={addRow} style={{ color: 'black' }}>添加模型</button>
             </div>
           </div>
         </div>
