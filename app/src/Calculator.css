@@ -60,3 +60,9 @@ button:hover {
   justify-content: center; /* Center the buttons */
   gap: 5px; /* Adjust the gap as needed */
 }
+
+.add-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}

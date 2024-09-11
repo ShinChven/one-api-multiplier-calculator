@@ -80,7 +80,6 @@ const Calculator: React.FC = () => {
     <div className="container">
       <h1>One-API Multiplier Calculator</h1>
       <div className="card">
-        <button onClick={addRow}>➕</button>
         <p style={{ textAlign: 'center' }}>Price calculated per 1k Tokens</p>
         <table>
           <thead>
@@ -143,6 +142,9 @@ const Calculator: React.FC = () => {
             ))}
           </tbody>
         </table>
+        <div className="add-button-container">
+        <button onClick={addRow}>➕</button>
+      </div>
       </div>
     </div>
   );
