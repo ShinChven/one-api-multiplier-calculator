@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './Calculator.css';
 
 function calculateMultipliers(inputPrice: number, outputPrice: number) {
   if (isNaN(inputPrice) || isNaN(outputPrice)) {
     throw new Error('Input and output prices must be numbers');
   }
-  
+
   if (inputPrice === 0) {
     throw new Error('Input price cannot be zero to calculate multipliers');
   }
@@ -29,13 +29,18 @@ const Calculator: React.FC = () => {
     modelMultiplier: number;
     completionMultiplier: number;
     editing: boolean;
+    originalValues: {
+      modelName: string;
+      inputPrice: number;
+      outputPrice: number;
+    } | null;
   }[]>(() => {
     const storedData = localStorage.getItem(localStorageKey);
-    return storedData ? JSON.parse(storedData) : [];
+    return storedData ? JSON.parse(storedData).map((row: any) => ({ ...row, originalValues: null })) : [];
   });
 
   const addRow = () => {
-    setRows(prevRows => [...prevRows, { modelName: '', inputPrice: 0, outputPrice: 0, modelMultiplier: 0, completionMultiplier: 0, editing: true }]);
+    setRows(prevRows => [...prevRows, { modelName: '', inputPrice: 0, outputPrice: 0, modelMultiplier: 0, completionMultiplier: 0, editing: true, originalValues: null }]);
   };
 
   const handleInputChange = (index: number, field: string, value: string) => {
@@ -61,13 +66,36 @@ const Calculator: React.FC = () => {
 
   const toggleEdit = (index: number) => {
     const newRows = [...rows];
+    if (!newRows[index].editing) {
+      // Entering edit mode: store original values
+      newRows[index].originalValues = {
+        modelName: newRows[index].modelName,
+        inputPrice: newRows[index].inputPrice,
+        outputPrice: newRows[index].outputPrice,
+      };
+    }
     newRows[index].editing = !newRows[index].editing;
+
 
     if (!newRows[index].editing) {
       // Save to localStorage when exiting edit mode (save button clicked)
-      localStorage.setItem(localStorageKey, JSON.stringify(newRows));
+      localStorage.setItem(localStorageKey, JSON.stringify(newRows.map(row => ({...row, originalValues: null})))); // Remove originalValues when saving
     }
 
+    setRows(newRows);
+  };
+
+
+  const cancelEdit = (index: number) => {
+    const newRows = [...rows];
+    if (newRows[index].originalValues) {
+      newRows[index] = {
+        ...newRows[index],
+        ...newRows[index].originalValues, // Restore original values
+        editing: false,
+        originalValues: null,
+      };
+    }
     setRows(newRows);
   };
 
@@ -133,10 +161,17 @@ const Calculator: React.FC = () => {
                 <td>{row.completionMultiplier.toFixed(4)}</td>
                 <td>
                   <div className="action-buttons">
-                    <button onClick={() => toggleEdit(index)}>
-                      {row.editing ? '💾' : '✏️'}
-                    </button>
-                    <button onClick={() => deleteRow(index)}>🗑️</button>
+                    {row.editing ? (
+                      <>
+                        <button onClick={() => toggleEdit(index)}>💾</button>
+                        <button onClick={() => cancelEdit(index)}>❌</button> {/* Cancel button */}
+                      </>
+                    ) : (
+                      <>
+                        <button onClick={() => toggleEdit(index)}>✏️</button>
+                        <button onClick={() => deleteRow(index)}>🗑️</button>
+                      </>
+                    )}
                   </div>
                 </td>
               </tr>
@@ -144,8 +179,8 @@ const Calculator: React.FC = () => {
           </tbody>
         </table>
         <div className="add-button-container">
-        <button onClick={addRow}>➕</button>
-      </div>
+          <button onClick={addRow}>➕</button>
+        </div>
       </div>
     </div>
   );
