@@ -3,14 +3,14 @@ import './Calculator.css';
 
 function calculateMultipliers(inputPrice: number, outputPrice: number, isPerMillion: boolean) {
   if (isNaN(inputPrice) || isNaN(outputPrice)) {
-    throw new Error('Input and output prices must be numbers');
+    throw new Error('输入和输出价格必须是数字');
   }
 
   if (inputPrice === 0) {
-    throw new Error('Input price cannot be zero to calculate multipliers');
+    throw new Error('输入价格不能为零以计算倍率');
   }
 
-  const basePrice = isPerMillion ? 2 : 0.002; // Adjust base price based on unit
+  const basePrice = isPerMillion ? 2 : 0.002; // 根据单位调整基础价格
   const modelMultiplier = inputPrice / basePrice;
   const completionMultiplier = outputPrice / inputPrice;
 
@@ -22,7 +22,7 @@ function calculateMultipliers(inputPrice: number, outputPrice: number, isPerMill
 
 const Calculator: React.FC = () => {
   const localStorageKey = 'calculatorData';
-  const [isPerMillion, setIsPerMillion] = useState(false); // Track whether the calculation is per 1k or 1M
+  const [isPerMillion, setIsPerMillion] = useState(false); // 跟踪计算是每1k还是1M
   const [rows, setRows] = useState<{
     modelName: string;
     inputPrice: number;
@@ -48,7 +48,7 @@ const Calculator: React.FC = () => {
   });
 
   const convertPrices = (rows: any[], toMillion: boolean) => {
-    const conversionFactor = toMillion ? 1000 : 0.001; // Convert prices between 1k and 1M Tokens
+    const conversionFactor = toMillion ? 1000 : 0.001; // 在1k和1M Tokens之间转换价格
     return rows.map(row => ({
       ...row,
       inputPrice: row.inputPrice * conversionFactor,
