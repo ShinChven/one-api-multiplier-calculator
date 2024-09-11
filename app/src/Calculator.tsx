@@ -30,7 +30,7 @@ const Calculator: React.FC = () => {
     return storedData ? JSON.parse(storedData) : [];
   });
 
-  useEffect(() => {}, []); // Local storage effect removed
+  useEffect(() => { }, []); // Local storage effect removed
 
   const addRow = () => {
     setRows(prevRows => [...prevRows, { modelName: '', inputPrice: 0, outputPrice: 0, modelMultiplier: 0, completionMultiplier: 0, editing: true }]);
@@ -72,13 +72,14 @@ const Calculator: React.FC = () => {
     <div className="container">
       <h1>One-API Multiplier Calculator</h1>
       <div className="card">
-        <button onClick={addRow}>+</button>
+        <button onClick={addRow}>➕</button>
+        <p style={{ textAlign: 'center' }}>Price calculated per 1k Tokens</p>
         <table>
           <thead>
             <tr>
               <th>Model Name</th>
-              <th>Input Price/1k Tokens</th>
-              <th>Output Price/1k Tokens</th>
+              <th>Input Price</th>
+              <th>Output Price</th>
               <th>Model Multiplier</th>
               <th>Completion Multiplier</th>
               <th>Actions</th>
@@ -123,10 +124,12 @@ const Calculator: React.FC = () => {
                 <td>{row.modelMultiplier.toFixed(4)}</td>
                 <td>{row.completionMultiplier.toFixed(4)}</td>
                 <td>
-                  <button onClick={() => toggleEdit(index)}>
-                    {row.editing ? 'Save' : 'Edit'}
-                  </button>
-                  <button onClick={() => deleteRow(index)}>Delete</button>
+                  <div className="action-buttons">
+                    <button onClick={() => toggleEdit(index)}>
+                      {row.editing ? '💾' : '✏️'}
+                    </button>
+                    <button onClick={() => deleteRow(index)}>🗑️</button>
+                  </div>
                 </td>
               </tr>
             ))}

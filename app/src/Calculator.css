@@ -12,10 +12,51 @@
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
   width: 100%; /* Optional: set a max width for responsiveness */
-  max-width: 900px;
+  max-width: 960px;
 }
 
 h1 {
   text-align: center;
   color: #333;  
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #e0e0e0;
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #e0e0e0;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #b0b0b0; /* Darker shade for hover effect */
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center; /* Center the buttons */
+  gap: 5px; /* Adjust the gap as needed */
 }
