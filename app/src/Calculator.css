@@ -66,3 +66,35 @@ button:hover {
   justify-content: center;
   margin-top: 20px;
 }
+
+@media (max-width: 768px) {
+  .card {
+    width: 95%; /* Adjust width for smaller screens */
+    padding: 15px; /* Reduce padding */
+  }
+
+  table {
+    font-size: 14px; /* Reduce font size */
+  }
+
+  button {
+    padding: 4px 8px; /* Reduce button padding */
+    font-size: 14px; /* Reduce button font size */
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    width: 100%; /* Full width on very small screens */
+    padding: 10px; /* Further reduce padding */
+  }
+
+  table {
+    font-size: 12px; /* Further reduce font size */
+  }
+
+  button {
+    padding: 2px 5px; /* Further reduce button padding */
+    font-size: 12px; /* Further reduce button font size */
+  }
+}
