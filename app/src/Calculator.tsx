@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './Calculator.css';
 
 function calculateMultipliers(inputPrice: number, outputPrice: number) {
   if (isNaN(inputPrice) || isNaN(outputPrice)) {
@@ -34,9 +35,9 @@ const Calculator: React.FC = () => {
 
   const handleInputChange = (index: number, field: string, value: string) => {
     const newRows = [...rows];
-    newRows[index] = { 
-      ...newRows[index], 
-      [field]: field === 'modelName' ? value : parseFloat(value) || 0 
+    newRows[index] = {
+      ...newRows[index],
+      [field]: field === 'modelName' ? value : parseFloat(value) || 0
     };
     setRows(newRows);
   };
@@ -50,52 +51,54 @@ const Calculator: React.FC = () => {
   };
 
   return (
-    <div>
-      <button onClick={addRow}>+</button>
-      <table>
-        <thead>
-          <tr>
-            <th>Model Name</th>
-            <th>Input Price/1k Tokens</th>  
-            <th>Output Price/1k Tokens</th>
-            <th>Model Multiplier</th>
-            <th>Completion Multiplier</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row, index) => (
-            <tr key={index}>
-              <td>
-                <input
-                  type="text"
-                  value={row.modelName}
-                  onChange={(e) => handleInputChange(index, 'modelName', e.target.value)}
-                />
-              </td>
-              <td>
-                <input
-                  type="number"
-                  value={row.inputPrice}
-                  onChange={(e) => handleInputChange(index, 'inputPrice', e.target.value)}
-                />
-              </td>
-              <td>
-                <input
-                  type="number"
-                  value={row.outputPrice}
-                  onChange={(e) => handleInputChange(index, 'outputPrice', e.target.value)}
-                />
-              </td>
-              <td>{row.modelMultiplier.toFixed(4)}</td>
-              <td>{row.completionMultiplier.toFixed(4)}</td>
-              <td>
-                <button onClick={() => calculateRow(index)}>Calculate</button>
-              </td>
+    <div className="container">
+      <div className="card">
+        <button onClick={addRow}>+</button>
+        <table>
+          <thead>
+            <tr>
+              <th>Model Name</th>
+              <th>Input Price/1k Tokens</th>
+              <th>Output Price/1k Tokens</th>
+              <th>Model Multiplier</th>
+              <th>Completion Multiplier</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map((row, index) => (
+              <tr key={index}>
+                <td>
+                  <input
+                    type="text"
+                    value={row.modelName}
+                    onChange={(e) => handleInputChange(index, 'modelName', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    value={row.inputPrice}
+                    onChange={(e) => handleInputChange(index, 'inputPrice', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    value={row.outputPrice}
+                    onChange={(e) => handleInputChange(index, 'outputPrice', e.target.value)}
+                  />
+                </td>
+                <td>{row.modelMultiplier.toFixed(4)}</td>
+                <td>{row.completionMultiplier.toFixed(4)}</td>
+                <td>
+                  <button onClick={() => calculateRow(index)}>Calculate</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
