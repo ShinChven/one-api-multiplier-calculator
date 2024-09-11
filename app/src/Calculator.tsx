@@ -67,8 +67,8 @@ const Calculator: React.FC = () => {
     const conversionFactor = toMillion ? 1000 : 0.001; // 在1k和1M Tokens之间转换价格
     return rows.map(row => ({
       ...row,
-      inputPrice: row.inputPrice * conversionFactor,
-      outputPrice: row.outputPrice * conversionFactor,
+      inputPrice: parseFloat((row.inputPrice * conversionFactor).toFixed(10)), // Prevent strange numbers
+      outputPrice: parseFloat((row.outputPrice * conversionFactor).toFixed(10)), // Prevent strange numbers
     }));
   };
 
