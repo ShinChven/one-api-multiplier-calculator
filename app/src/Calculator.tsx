@@ -82,8 +82,9 @@ const Calculator: React.FC = () => {
   const resetData = () => {
     if (window.confirm("您确定要重置数据吗？此操作无法撤销。")) {
       localStorage.removeItem(localStorageKey);
+      setIsPerMillion(false); // Reset unit to 1K
       setRows(defaultData.map((row: any) => {
-        const { modelMultiplier, completionMultiplier } = calculateMultipliers(row.inputPrice, row.outputPrice, isPerMillion);
+        const { modelMultiplier, completionMultiplier } = calculateMultipliers(row.inputPrice, row.outputPrice, false);
         return {
           ...row,
           modelMultiplier,
