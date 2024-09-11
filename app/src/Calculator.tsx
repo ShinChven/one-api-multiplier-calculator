@@ -3,7 +3,11 @@ import './Calculator.css';
 
 function calculateMultipliers(inputPrice: number, outputPrice: number) {
   if (isNaN(inputPrice) || isNaN(outputPrice)) {
-    throw new Error('输入和输出价格必须为数字');
+    throw new Error('Input and output prices must be numbers');
+  }
+  
+  if (inputPrice === 0) {
+    throw new Error('Input price cannot be zero to calculate multipliers');
   }
 
   const basePrice = 0.002;
@@ -30,7 +34,9 @@ const Calculator: React.FC = () => {
     return storedData ? JSON.parse(storedData) : [];
   });
 
-  useEffect(() => { }, []); // Local storage effect removed
+  useEffect(() => {
+    localStorage.setItem(localStorageKey, JSON.stringify(rows));
+  }, [rows]);
 
   const addRow = () => {
     setRows(prevRows => [...prevRows, { modelName: '', inputPrice: 0, outputPrice: 0, modelMultiplier: 0, completionMultiplier: 0, editing: true }]);
@@ -45,8 +51,13 @@ const Calculator: React.FC = () => {
 
     if (field === 'inputPrice' || field === 'outputPrice') {
       const { inputPrice, outputPrice } = newRows[index];
-      const { modelMultiplier, completionMultiplier } = calculateMultipliers(inputPrice, outputPrice);
-      newRows[index] = { ...newRows[index], modelMultiplier, completionMultiplier };
+      try {
+        const { modelMultiplier, completionMultiplier } = calculateMultipliers(inputPrice, outputPrice);
+        newRows[index] = { ...newRows[index], modelMultiplier, completionMultiplier };
+      } catch (error: any) {
+        console.error(error.message);
+        newRows[index] = { ...newRows[index], modelMultiplier: 0, completionMultiplier: 0 };
+      }
     }
 
     setRows(newRows);
@@ -55,11 +66,6 @@ const Calculator: React.FC = () => {
   const toggleEdit = (index: number) => {
     const newRows = [...rows];
     newRows[index].editing = !newRows[index].editing;
-
-    if (!newRows[index].editing) {
-      // Save to localStorage when exiting edit mode
-      localStorage.setItem(localStorageKey, JSON.stringify(newRows));
-    }
 
     setRows(newRows);
   };
