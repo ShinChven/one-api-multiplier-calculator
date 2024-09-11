@@ -79,6 +79,21 @@ const Calculator: React.FC = () => {
     localStorage.setItem(localStorageKey, JSON.stringify(newRows.map(row => ({ ...row, originalValues: null }))));
   };
 
+  const resetData = () => {
+    if (window.confirm("您确定要重置数据吗？此操作无法撤销。")) {
+      localStorage.removeItem(localStorageKey);
+      setRows(defaultData.map((row: any) => {
+        const { modelMultiplier, completionMultiplier } = calculateMultipliers(row.inputPrice, row.outputPrice, isPerMillion);
+        return {
+          ...row,
+          modelMultiplier,
+          completionMultiplier,
+          originalValues: null
+        };
+      }));
+    }
+  };
+
   const addRow = () => {
     setRows(prevRows => [...prevRows, { 
       modelName: '', 
@@ -173,7 +188,10 @@ const Calculator: React.FC = () => {
           </p>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <p style={{ margin: 0 }}>价格基于每 {isPerMillion ? '1M' : '1K'} 个 Token 进行计算</p>
-            <button onClick={toggleUnit} style={{ color: 'black' }}>切换为 {isPerMillion ? '1K' : '1M'}</button>
+            <div>
+              <button onClick={toggleUnit} style={{ color: 'black' }}>切换为 {isPerMillion ? '1K' : '1M'}</button>
+              <button onClick={resetData} style={{ color: 'red', marginLeft: '10px' }}>重置数据</button>
+            </div>
           </div>
         </div>
         <table>
