@@ -127,14 +127,14 @@ const Calculator: React.FC = () => {
 
   return (
     <div className="container">
-      <h1>One-API Multiplier Calculator</h1>
+      <h1>One-API 模型定价倍率计算器</h1>
       <div className="card">
         <div style={{ textAlign: 'left' }}>
           <p>
             <a href="https://github.com/songquanpeng" target="_blank" rel="noopener noreferrer">One-API</a> 是一个开源的 AI API 聚合程序，它支持 OpenAI、Google、Anthropic 等多个 API 提供商。One-API 通过一个统一的 API 接口，让用户可以方便地在不同的 API 提供商之间切换，并且提供用户计费功能，可以为每个用户的 API 请求计算价格。
           </p>
           <p>
-            倍率：在 One-API 的模型定价体系中，以 $0.002 1K tokens 为1倍，换算成 1M tokens 为 $2。补全倍率：补全倍率是指输出为输入的倍率，即输出的价格是输入的倍数。例如，输入价格为 $10，输出价格为 $30，那么输出价格是输入价格的 3 倍，补全倍率为 3。用户分组倍率：one-api 的运行和维护需要一定的服务器成本，因此可以设置一个分组倍率让相关用户在使用时分摊这部分成本。
+            倍率：在 One-API 的模型定价体系中，以 $0.002 1K tokens 为1倍，换算成 1M tokens 为 $2。补全倍率：补全倍率是指输出为输入的倍率，即输出的价格是输入的倍数。例如，输入价格为 $10，输出价格为 $30，那么输出价格是输入价格的 3 倍，补全倍率为 3。用户分组倍率： One-API 的运行和维护需要一定的服务器成本，因此可以设置一个分组倍率让相关用户在使用时分摊这部分成本。
           </p>
           <p>
             公式：额度 = 分组倍率 * 模型倍率 * （提示 token 数 + 补全 token 数 * 补全倍率）
@@ -146,7 +146,7 @@ const Calculator: React.FC = () => {
             数据存在你的浏览器中了。
           </p>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <p style={{ margin: 0 }}>价格计算基于每 {isPerMillion ? '1M' : '1K'} 个Token</p>
+            <p style={{ margin: 0 }}>价格基于每 {isPerMillion ? '1M' : '1K'} 个 Token 进行计算</p>
             <button onClick={toggleUnit} style={{ color: 'black' }}>切换为 {isPerMillion ? '1K' : '1M'}</button>
           </div>
         </div>
