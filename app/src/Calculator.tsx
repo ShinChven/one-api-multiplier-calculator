@@ -36,7 +36,14 @@ const Calculator: React.FC = () => {
     } | null;
   }[]>(() => {
     const storedData = localStorage.getItem(localStorageKey);
-    return storedData ? JSON.parse(storedData).map((row: any) => ({ ...row, originalValues: null })) : [];
+    return storedData ? JSON.parse(storedData).map((row: any) => ({
+      ...row,
+      originalValues: row.editing ? {
+        modelName: row.modelName,
+        inputPrice: row.inputPrice,
+        outputPrice: row.outputPrice,
+      } : null
+    })) : [];
   });
 
   const addRow = () => {
@@ -76,7 +83,6 @@ const Calculator: React.FC = () => {
     }
     newRows[index].editing = !newRows[index].editing;
 
-
     if (!newRows[index].editing) {
       // Save to localStorage when exiting edit mode (save button clicked)
       localStorage.setItem(localStorageKey, JSON.stringify(newRows.map(row => ({...row, originalValues: null})))); // Remove originalValues when saving
@@ -84,7 +90,6 @@ const Calculator: React.FC = () => {
 
     setRows(newRows);
   };
-
 
   const cancelEdit = (index: number) => {
     const newRows = [...rows];
