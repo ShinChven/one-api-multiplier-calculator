@@ -89,8 +89,11 @@ button:hover {
 
 @media (max-width: 480px) {
   .card {
-    width: 100%; /* Full width on very small screens */
     padding: 10px; /* Further reduce padding */
+    border-radius: none;
+    box-shadow: none;
+    background-color: none;
+    border: none;
   }
 
   table {
