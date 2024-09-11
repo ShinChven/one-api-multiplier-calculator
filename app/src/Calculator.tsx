@@ -18,19 +18,22 @@ function calculateMultipliers(inputPrice: number, outputPrice: number) {
 
 const Calculator: React.FC = () => {
   const localStorageKey = 'calculatorData';
-  const [rows, setRows] = useState<{ modelName: string; inputPrice: number; outputPrice: number; modelMultiplier: number; completionMultiplier: number; }[]>(() => {
+  const [rows, setRows] = useState<{
+    modelName: string;
+    inputPrice: number;
+    outputPrice: number;
+    modelMultiplier: number;
+    completionMultiplier: number;
+    editing: boolean;
+  }[]>(() => {
     const storedData = localStorage.getItem(localStorageKey);
     return storedData ? JSON.parse(storedData) : [];
   });
 
-  useEffect(() => {
-    if (rows.length > 0) {
-      localStorage.setItem(localStorageKey, JSON.stringify(rows));
-    }
-  }, [rows]);
+  useEffect(() => {}, []); // Local storage effect removed
 
   const addRow = () => {
-    setRows(prevRows => [...prevRows, { modelName: '', inputPrice: 0, outputPrice: 0, modelMultiplier: 0, completionMultiplier: 0 }]);
+    setRows(prevRows => [...prevRows, { modelName: '', inputPrice: 0, outputPrice: 0, modelMultiplier: 0, completionMultiplier: 0, editing: true }]);
   };
 
   const handleInputChange = (index: number, field: string, value: string) => {
@@ -39,15 +42,30 @@ const Calculator: React.FC = () => {
       ...newRows[index],
       [field]: field === 'modelName' ? value : parseFloat(value) || 0
     };
+
+    if (field === 'inputPrice' || field === 'outputPrice') {
+      const { inputPrice, outputPrice } = newRows[index];
+      const { modelMultiplier, completionMultiplier } = calculateMultipliers(inputPrice, outputPrice);
+      newRows[index] = { ...newRows[index], modelMultiplier, completionMultiplier };
+    }
+
     setRows(newRows);
   };
 
-  const calculateRow = (index: number) => {
-    const { inputPrice, outputPrice } = rows[index];
-    const { modelMultiplier, completionMultiplier } = calculateMultipliers(inputPrice, outputPrice);
+  const toggleEdit = (index: number) => {
     const newRows = [...rows];
-    newRows[index] = { ...newRows[index], modelMultiplier, completionMultiplier };
+    newRows[index].editing = !newRows[index].editing;
+
+    if (!newRows[index].editing) {
+      // Save to localStorage when exiting edit mode
+      localStorage.setItem(localStorageKey, JSON.stringify(newRows));
+    }
+
     setRows(newRows);
+  };
+
+  const deleteRow = (index: number) => {
+    setRows(prevRows => prevRows.filter((_, i) => i !== index));
   };
 
   return (
@@ -69,30 +87,45 @@ const Calculator: React.FC = () => {
             {rows.map((row, index) => (
               <tr key={index}>
                 <td>
-                  <input
-                    type="text"
-                    value={row.modelName}
-                    onChange={(e) => handleInputChange(index, 'modelName', e.target.value)}
-                  />
+                  {row.editing ? (
+                    <input
+                      type="text"
+                      value={row.modelName}
+                      onChange={(e) => handleInputChange(index, 'modelName', e.target.value)}
+                    />
+                  ) : (
+                    <span>{row.modelName}</span>
+                  )}
                 </td>
                 <td>
-                  <input
-                    type="number"
-                    value={row.inputPrice}
-                    onChange={(e) => handleInputChange(index, 'inputPrice', e.target.value)}
-                  />
+                  {row.editing ? (
+                    <input
+                      type="number"
+                      value={row.inputPrice}
+                      onChange={(e) => handleInputChange(index, 'inputPrice', e.target.value)}
+                    />
+                  ) : (
+                    <span>{row.inputPrice.toFixed(2)}</span>
+                  )}
                 </td>
                 <td>
-                  <input
-                    type="number"
-                    value={row.outputPrice}
-                    onChange={(e) => handleInputChange(index, 'outputPrice', e.target.value)}
-                  />
+                  {row.editing ? (
+                    <input
+                      type="number"
+                      value={row.outputPrice}
+                      onChange={(e) => handleInputChange(index, 'outputPrice', e.target.value)}
+                    />
+                  ) : (
+                    <span>{row.outputPrice.toFixed(2)}</span>
+                  )}
                 </td>
                 <td>{row.modelMultiplier.toFixed(4)}</td>
                 <td>{row.completionMultiplier.toFixed(4)}</td>
                 <td>
-                  <button onClick={() => calculateRow(index)}>Calculate</button>
+                  <button onClick={() => toggleEdit(index)}>
+                    {row.editing ? 'Save' : 'Edit'}
+                  </button>
+                  <button onClick={() => deleteRow(index)}>Delete</button>
                 </td>
               </tr>
             ))}
