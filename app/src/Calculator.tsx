@@ -1,5 +1,20 @@
 import React, { useState } from 'react';
 import './Calculator.css';
+import defaultData from './default-data';
+
+type RowData = {
+  modelName: string;
+  inputPrice: number;
+  outputPrice: number;
+  modelMultiplier: number;
+  completionMultiplier: number;
+  editing: boolean;
+  originalValues: {
+    modelName: string;
+    inputPrice: number;
+    outputPrice: number;
+  } | null;
+};
 
 function calculateMultipliers(inputPrice: number, outputPrice: number, isPerMillion: boolean) {
   if (isNaN(inputPrice) || isNaN(outputPrice)) {
@@ -23,31 +38,32 @@ function calculateMultipliers(inputPrice: number, outputPrice: number, isPerMill
 const Calculator: React.FC = () => {
   const localStorageKey = 'calculatorData';
   const [isPerMillion, setIsPerMillion] = useState(false); // 跟踪计算是每1k还是1M
-  const [rows, setRows] = useState<{
-    modelName: string;
-    inputPrice: number;
-    outputPrice: number;
-    modelMultiplier: number;
-    completionMultiplier: number;
-    editing: boolean;
-    originalValues: {
-      modelName: string;
-      inputPrice: number;
-      outputPrice: number;
-    } | null;
-  }[]>(() => {
+  const [rows, setRows] = useState<RowData[]>(() => {
     const storedData = localStorage.getItem(localStorageKey);
-    return storedData ? JSON.parse(storedData).map((row: any) => ({
+    if (!storedData) {
+      const initialData = defaultData.map((row: any) => {
+        const { modelMultiplier, completionMultiplier } = calculateMultipliers(row.inputPrice, row.outputPrice, isPerMillion);
+        return {
+          ...row,
+          modelMultiplier,
+          completionMultiplier,
+          originalValues: null
+        };
+      });
+      localStorage.setItem(localStorageKey, JSON.stringify(initialData));
+      return initialData;
+    }
+    return JSON.parse(storedData).map((row: any) => ({
       ...row,
       originalValues: row.editing ? {
         modelName: row.modelName,
         inputPrice: row.inputPrice,
         outputPrice: row.outputPrice,
       } : null
-    })) : [];
+    }));
   });
 
-  const convertPrices = (rows: any[], toMillion: boolean) => {
+  const convertPrices = (rows: RowData[], toMillion: boolean) => {
     const conversionFactor = toMillion ? 1000 : 0.001; // 在1k和1M Tokens之间转换价格
     return rows.map(row => ({
       ...row,
@@ -64,7 +80,15 @@ const Calculator: React.FC = () => {
   };
 
   const addRow = () => {
-    setRows(prevRows => [...prevRows, { modelName: '', inputPrice: 0, outputPrice: 0, modelMultiplier: 0, completionMultiplier: 0, editing: true, originalValues: null }]);
+    setRows(prevRows => [...prevRows, { 
+      modelName: '', 
+      inputPrice: 0, 
+      outputPrice: 0, 
+      modelMultiplier: 0, 
+      completionMultiplier: 0, 
+      editing: true, 
+      originalValues: null 
+    }]);
   };
 
   const handleInputChange = (index: number, field: string, value: string) => {
@@ -155,12 +179,12 @@ const Calculator: React.FC = () => {
         <table>
           <thead>
             <tr>
-              <th>Model Name</th>
-              <th>Input Price</th>
-              <th>Output Price</th>
-              <th>Model Multiplier</th>
-              <th>Completion Multiplier</th>
-              <th>Actions</th>
+              <th>模型名称</th>
+              <th>输入价格</th>
+              <th>输出价格</th>
+              <th>模型倍率</th>
+              <th>补全倍率</th>
+              <th>操作</th>
             </tr>
           </thead>
           <tbody>
@@ -185,7 +209,7 @@ const Calculator: React.FC = () => {
                       onChange={(e) => handleInputChange(index, 'inputPrice', e.target.value)}
                     />
                   ) : (
-                    <span>{row.inputPrice.toFixed(2)}</span>
+                    <span>{row.inputPrice}</span>
                   )}
                 </td>
                 <td>
@@ -196,7 +220,7 @@ const Calculator: React.FC = () => {
                       onChange={(e) => handleInputChange(index, 'outputPrice', e.target.value)}
                     />
                   ) : (
-                    <span>{row.outputPrice.toFixed(2)}</span>
+                    <span>{row.outputPrice}</span>
                   )}
                 </td>
                 <td>{row.modelMultiplier.toFixed(4)}</td>
