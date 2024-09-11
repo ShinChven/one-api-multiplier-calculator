@@ -70,6 +70,7 @@ const Calculator: React.FC = () => {
 
   return (
     <div className="container">
+      <h1>One-API Multiplier Calculator</h1>
       <div className="card">
         <button onClick={addRow}>+</button>
         <table>
