@@ -115,6 +115,8 @@ const Calculator: React.FC = () => {
         editing: false,
         originalValues: null,
       };
+    } else {
+      newRows.splice(index, 1); // 删除未保存的新增行
     }
     setRows(newRows);
   };
