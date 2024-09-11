@@ -248,6 +248,11 @@ const Calculator: React.FC = () => {
           <button onClick={addRow}>➕</button>
         </div>
       </div>
+      <div style={{ textAlign: 'center', marginTop: '20px' }}>
+        <a href="https://github.com/ShinChven/one-api-multiplier-calculator" target="_blank" rel="noopener noreferrer">
+          GitHub 仓库
+        </a>
+      </div>
     </div>
   );
 };
