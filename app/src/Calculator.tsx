@@ -175,7 +175,7 @@ const Calculator: React.FC = () => {
       <div className="card">
         <div style={{ textAlign: 'left' }}>
           <p>
-            <a href="https://github.com/songquanpeng" target="_blank" rel="noopener noreferrer">One-API</a> 是一个开源的 AI API 聚合程序，它支持 OpenAI、Google、Anthropic 等多个 API 提供商。One-API 通过一个统一的 API 接口，让用户可以方便地在不同的 API 提供商之间切换，并且提供用户计费功能，可以为每个用户的 API 请求计算价格。
+            <a href="https://github.com/songquanpeng/one-api" target="_blank" rel="noopener noreferrer">One-API</a> 是一个开源的 AI API 聚合程序，它支持 OpenAI、Google、Anthropic 等多个 API 提供商。One-API 通过一个统一的 API 接口，让用户可以方便地在不同的 API 提供商之间切换，并且提供用户计费功能，可以为每个用户的 API 请求计算价格。
           </p>
           <p>
             倍率：在 One-API 的模型定价体系中，以 $0.002 1K tokens 为1倍，换算成 1M tokens 为 $2。补全倍率：补全倍率是指输出为输入的倍率，即输出的价格是输入的倍数。例如，输入价格为 $10，输出价格为 $30，那么输出价格是输入价格的 3 倍，补全倍率为 3。用户分组倍率： One-API 的运行和维护需要一定的服务器成本，因此可以设置一个分组倍率让相关用户在使用时分摊这部分成本。
